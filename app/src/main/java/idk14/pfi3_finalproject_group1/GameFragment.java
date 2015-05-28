@@ -5,7 +5,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +21,19 @@ import com.firebase.client.ValueEventListener;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class StartFragment extends Fragment implements View.OnClickListener {
+public class GameFragment extends Fragment implements View.OnClickListener {
 
-    static String myTreasure;
-    public String scanContent;
-    static Firebase ref = new Firebase(Constants.FIREBASE_URL);
+    public static String myTreasure;
+    public static String scanContent;
+    public static Firebase ref = new Firebase(Constants.FIREBASE_URL);
+
+    TextView tvWater;
+    TextView tvAir;
+    TextView tvSun;
 
 
-    public StartFragment() {
+
+    public GameFragment() {
         // Required empty public constructor
     }
 
@@ -38,23 +42,37 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_start, container, false); //Fills the layout
+        View v = inflater.inflate(R.layout.fragment_game, container, false);
 
-        Button button = (Button) v.findViewById(R.id.button);
-        button.setOnClickListener(this);
+        tvAir = (TextView) v.findViewById(R.id.textViewAir);
+        tvWater = (TextView)v.findViewById(R.id.textViewWater);
+        tvSun = (TextView)v.findViewById(R.id.textViewSun);
+
+        Button scanButton = (Button) v.findViewById(R.id.scanButton);
+        Button inventoryButton = (Button) v.findViewById(R.id.inventory_button);
+        inventoryButton.setOnClickListener(this);
+        scanButton.setOnClickListener(this);
 
         return v;
     }
 
-
+    //Sets scan button to open up the scanner
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.button) {
+        if (view.getId() == R.id.scanButton) {
             IntentIntegrator scanIntegrator = new IntentIntegrator(this);
             scanIntegrator.initiateScan();
         }
+        if (view.getId() == R.id.inventory_button){
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.main_layout, new InventoryFragment());
+            ft.addToBackStack(null);
+            ft.commit();
+        }
     }
 
+    //What happens once the user has scanned a QR code
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanningResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanningResult != null && resultCode != 0 && intent != null) {
@@ -63,26 +81,60 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
             System.out.println("content: " + scanContent);
 
+            //method that checks the status of the firebase connection
             checkFirebaseConnection();
 
             if(scanContent.equals("TREE")){
-                System.out.println("You scanned the tree!");
+                System.out.println("You scanned Bloom!");
+                Toast.makeText(getActivity(), "You scanned Bloom! Go get a treasure first!", Toast.LENGTH_SHORT).show();
+
                 FragmentManager fm = getFragmentManager();
-                WrongScanFragment wsf = new WrongScanFragment();
-                wsf.show(fm, "No item scan");
+                FragmentTransaction ft = fm.beginTransaction();
+                ft.replace(R.id.main_layout, new InventoryFragment());
+                ft.addToBackStack(null);
+                ft.commit();
+
 
             }else{
                 checkFirebase();
-
             }
+
 
         } else {
             Toast.makeText(getActivity(), "No scan data received!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    //Method that reads what value is under the TreasureLocation that is specified by the
-    //scanned QR code (scanContent)
+    public void showFoundTreasure(){
+        if(myTreasure.equals("1")){
+            UserData.airScore = UserData.airScore + 1;
+            tvAir.setText(String.valueOf("Air score: " + UserData.airScore));
+
+            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found water!", Toast.LENGTH_SHORT).show();
+
+        }
+        if(myTreasure.equals("2")){
+            UserData.waterScore = UserData.waterScore + 1;
+            System.out.println(String.valueOf(UserData.waterScore));
+            tvWater.setText(String.valueOf(UserData.waterScore));
+
+
+            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found air!", Toast.LENGTH_SHORT).show();
+
+
+        }
+        if(myTreasure.equals("3")){
+            UserData.sunScore = UserData.sunScore + 1;
+            tvSun.setText(String.valueOf(UserData.sunScore));
+
+            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found sun!", Toast.LENGTH_SHORT).show();
+
+        }
+        if(myTreasure.equals("0")){
+            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found nothing!", Toast.LENGTH_SHORT).show();
+
+        }
+    }
 
     public void checkFirebase() {
 
@@ -101,26 +153,14 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                 //checks that the value has been stored correctly
                 System.out.println("My treasure type is: " + myTreasure);
 
-                updateFirebase();
 
-                //checks if myTreasure contains a value or if it is not 0 (no treasure)
-                if ((myTreasure != null) && (myTreasure.equals("0") == false)) {
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    ft.replace(R.id.main_layout, new TreasureFragment());
-                    ft.addToBackStack(null);
-                    ft.commit();
+                System.out.println("Firebase checked!");
 
-                    // doesn't open up the TreasureFragment if the value at treasureLocation is 0
-                } else if (myTreasure.equals("0")) {
-                    //emptyTxt.setVisibility(View.VISIBLE);
-                    System.out.println("The treasure spot is empty!");
-                    FragmentManager fm = getFragmentManager();
-                    EmptyFragment ef = new EmptyFragment();
-                    ef.show(fm, "Info");
+                if(myTreasure != null) {
+                    updateFirebase();
 
-                } else if (myTreasure == null){
-                    System.out.println("Something is wrong, try again.");
+                    showFoundTreasure();
+                    System.out.println("Here is your treasure!");
                 }
 
             }
@@ -139,6 +179,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         Firebase treasureRef = ref.child(scanContent);
         treasureRef.setValue(0);
 
+        System.out.println("Firebase updated!");
 
     }
 
@@ -156,6 +197,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                     System.out.println("not connected");
                     Toast.makeText(getActivity(), "No network connection", Toast.LENGTH_SHORT).show();
 
+
                 }
             }
 
@@ -165,5 +207,6 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
 
 }

@@ -9,16 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FinalFragment extends Fragment implements View.OnClickListener {
+public class WelcomeFragment extends Fragment implements View.OnClickListener {
+
+    EditText usernameText;
 
 
-    public FinalFragment() {
+    public WelcomeFragment() {
         // Required empty public constructor
     }
 
@@ -27,25 +29,29 @@ public class FinalFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_final, container, false);
 
-        TextView finalTxt = (TextView)v.findViewById(R.id.textFinal);
-        Button playAgainButton = (Button)v.findViewById(R.id.buttonPlayAgain);
 
-        finalTxt.setText("Congratulations! Enjoy your light show!");
+        View v = inflater.inflate(R.layout.fragment_welcome, container, false);
 
-        playAgainButton.setOnClickListener(this);
+        usernameText= (EditText) v.findViewById(R.id.editText_username);
 
+        Button startButton = (Button) v.findViewById(R.id.start_button);
+        startButton.setOnClickListener(this);
 
         return v;
+
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.buttonPlayAgain) {
+        if (view.getId() == R.id.start_button) {
+
+            UserData.username = usernameText.getText().toString();
+
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.main_layout, new GameFragment());
+            ft.addToBackStack(null);
             ft.commit();
         }
     }

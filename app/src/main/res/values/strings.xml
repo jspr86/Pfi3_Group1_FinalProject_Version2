@@ -22,15 +22,24 @@
     <string name="treasure_description"> Deliver your found treasure by scanning Bloom´s QR-code</string>
     <string name="no_connection_message">Could not connect. \nCheck your internet settings and try again.</string>
     <string name="wrong_scan">You have no treasure! Go scan a treasure spot and bring back a treasure.</string>
-
     <string name="action_HowToPlay">How to play</string>
-    <string name="play_again">Play again</string>
     <string name="congratulations">Enjoy your light show!</string>
-    <string name="deliver">Deliver treasure</string>
 
+
+    <!-- Button text -->
+    <string name="start">Start</string>
+    <string name="scan">Scan</string>
+    <string name="deliver">Deliver treasure</string>
+    <string name="play_again">Play again</string>
+    <string name="inventory">Inventory</string>
+
+    <string name="enter_name">Enter name</string>
 
 
     <string name="map">Map</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>
