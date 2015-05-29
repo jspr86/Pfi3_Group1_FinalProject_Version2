@@ -106,23 +106,23 @@ public class GameFragment extends Fragment implements View.OnClickListener {
     }
 
     public void showFoundTreasure(){
-        if(myTreasure.equals("1")){
-            UserData.airScore = UserData.airScore + 1;
-            tvAir.setText(String.valueOf("Air score: " + UserData.airScore));
-
-            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found water!", Toast.LENGTH_SHORT).show();
-
-        }
-        if(myTreasure.equals("2")){
+        if(myTreasure.equals("1")) {
             UserData.waterScore = UserData.waterScore + 1;
             System.out.println(String.valueOf(UserData.waterScore));
             tvWater.setText(String.valueOf(UserData.waterScore));
 
 
             Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found air!", Toast.LENGTH_SHORT).show();
+        }
 
+        if(myTreasure.equals("2")){
+            UserData.airScore = UserData.airScore + 1;
+            tvAir.setText(String.valueOf("Air score: " + UserData.airScore));
+
+            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found water!", Toast.LENGTH_SHORT).show();
 
         }
+
         if(myTreasure.equals("3")){
             UserData.sunScore = UserData.sunScore + 1;
             tvSun.setText(String.valueOf(UserData.sunScore));
