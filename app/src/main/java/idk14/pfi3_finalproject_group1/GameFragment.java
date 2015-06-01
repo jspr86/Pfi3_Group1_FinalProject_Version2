@@ -86,13 +86,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
 
             if(scanContent.equals("TREE")){
                 System.out.println("You scanned Bloom!");
-                Toast.makeText(getActivity(), "You scanned Bloom! Go get a treasure first!", Toast.LENGTH_SHORT).show();
 
-                FragmentManager fm = getFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.replace(R.id.main_layout, new InventoryFragment());
-                ft.addToBackStack(null);
-                ft.commit();
+                if(UserData.inventory[0].equals("0")) {
+                    Toast.makeText(getActivity(), "You scanned Bloom! Go get a treasure first!", Toast.LENGTH_SHORT).show();
+                }
+
 
 
             }else{
@@ -111,21 +109,27 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             System.out.println(String.valueOf(UserData.waterScore));
             tvWater.setText(String.valueOf(UserData.waterScore));
 
+            addTreasureToInventory("1");
 
-            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found air!", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found water!", Toast.LENGTH_SHORT).show();
         }
 
         if(myTreasure.equals("2")){
             UserData.airScore = UserData.airScore + 1;
             tvAir.setText(String.valueOf("Air score: " + UserData.airScore));
 
-            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found water!", Toast.LENGTH_SHORT).show();
+            addTreasureToInventory("2");
+
+            Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found air!", Toast.LENGTH_SHORT).show();
 
         }
 
         if(myTreasure.equals("3")){
             UserData.sunScore = UserData.sunScore + 1;
             tvSun.setText(String.valueOf(UserData.sunScore));
+
+            addTreasureToInventory("3");
 
             Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found sun!", Toast.LENGTH_SHORT).show();
 
@@ -134,6 +138,17 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "Hey " + UserData.username + "! You found nothing!", Toast.LENGTH_SHORT).show();
 
         }
+    }
+
+    public void addTreasureToInventory(String treasure){
+        for(int i = 0; i<9; i ++) {
+            if (UserData.inventory[i].equals("0")) {
+                UserData.inventory[i] = treasure;
+                System.out.println("Treasure added to inventory of type: " + treasure);
+                break;
+            }
+        }
+
     }
 
 
