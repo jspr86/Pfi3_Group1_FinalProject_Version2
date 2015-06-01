@@ -136,6 +136,9 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+
+    //Firebase methods
+
     public void checkFirebase() {
 
 

@@ -9,6 +9,6 @@ public class UserData {
     public static int airScore = 0;
     public static int waterScore = 0;
     public static int sunScore = 0;
-    public static int[] inventory = {0,0,0,0,0,0,0,0,0};
+    public static String[] inventory = {"0","0","0","0","0","0","0","0","0"};
 
 }
