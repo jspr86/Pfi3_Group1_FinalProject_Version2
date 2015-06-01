@@ -18,11 +18,11 @@ import java.util.ArrayList;
  */
 public class ImageAdapter extends ArrayAdapter<String> {
     private Context mContext;
-    private String[] inventoryList;
+    private ArrayList<String> inventoryList;
 
 
 
-    public ImageAdapter(Context c, String[] inventory) {
+    public ImageAdapter(Context c, ArrayList<String> inventory) {
         super(c, 0, inventory);
         inventoryList = inventory;
         mContext = c;
@@ -35,7 +35,7 @@ public class ImageAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Log.i("MyListAdapter", "Called for position: " + position);
 
-        String treasure = inventoryList[position];
+        String treasure = inventoryList.get(position);
 
         convertView = inflater.inflate(R.layout.grid_item,null);
 

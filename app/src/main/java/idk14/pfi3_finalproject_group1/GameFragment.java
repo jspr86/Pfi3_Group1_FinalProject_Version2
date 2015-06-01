@@ -87,7 +87,7 @@ public class GameFragment extends Fragment implements View.OnClickListener {
             if(scanContent.equals("TREE")){
                 System.out.println("You scanned Bloom!");
 
-                if(UserData.inventory[0].equals("0")) {
+                if(UserData.inventory.get(0).equals("0")) {
                     Toast.makeText(getActivity(), "You scanned Bloom! Go get a treasure first!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -140,11 +140,11 @@ public class GameFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void addTreasureToInventory(String treasure){
-        for(int i = 0; i<9; i ++) {
-            if (UserData.inventory[i].equals("0")) {
-                UserData.inventory[i] = treasure;
-                System.out.println("Treasure added to inventory of type: " + treasure);
+    public void addTreasureToInventory(String treasureIn){
+        for(int i = 0; i < UserData.inventory.size(); i ++){
+            if(UserData.inventory.get(i).equals("0")){
+                UserData.inventory.set(i, treasureIn);
+                System.out.println("Treasure added to inventory of type: " + treasureIn);
                 break;
             }
         }

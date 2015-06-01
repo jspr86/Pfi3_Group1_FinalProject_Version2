@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.firebase.client.Firebase;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends ActionBarActivity {
     private static long back_pressed;
@@ -25,6 +27,13 @@ public class MainActivity extends ActionBarActivity {
 
 
         Firebase.setAndroidContext(this);
+
+
+        //add nine empty spots to the inventory arraylist
+        UserData.inventory = new ArrayList<String>(9);
+        for(int i = 0; i < 9; i ++) {
+            UserData.inventory.add("0");
+        }
 
         setContentView(R.layout.activity_main);
 
